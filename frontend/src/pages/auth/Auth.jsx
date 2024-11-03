@@ -38,10 +38,14 @@ export default function AuthPage() {
 			return;
 		}
 		try {
-			const response = await apiClient.post("/api/auth/login", {
-				email,
-				password,
-			});
+			const response = await apiClient.post(
+				"/api/auth/login",
+				{
+					email,
+					password,
+				},
+				{ withCredentials: true }
+			);
 
 			setSuccess("Login successful!");
 			toast.success("Login successful!");
@@ -83,7 +87,8 @@ export default function AuthPage() {
 					email,
 					name,
 					password,
-				}
+				},
+				{ withCredentials: true }
 			);
 
 			setSuccess("Signup successful!");

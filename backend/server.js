@@ -5,7 +5,7 @@ import cors from "cors";
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
 import authRouter from "./routes/auth.routes.js";
-
+import contactRouter from "./routes/contact.routes.js";
 dotenv.config();
 
 const app = express();
@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 3000;
 // Apply CORS middleware
 app.use(
 	cors({
-		origin: [process.env.ORIGIN || "http://localhost:5173", "*"], // Allow specific origin
+		credentials: true,
+		origin: "http://localhost:5173", // Allow specific origin
 		methods: ["GET", "POST"], // Specify allowed methods
 	})
 );
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRouter);
+app.use("/api", contactRouter);
 
 // Start the server and connect to MongoDB
 app.listen(PORT, () => {

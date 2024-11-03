@@ -12,8 +12,8 @@ const generateToken = (email, userId) => {
 
 const Signup = async (req, res) => {
 	try {
-		const { email, password } = req.body;
-		if (!email || !password) {
+		const { email, password, name } = req.body;
+		if (!email || !password || !name) {
 			return res.status(400).json({ error: "Please fill all the fields" });
 		}
 
@@ -25,13 +25,11 @@ const Signup = async (req, res) => {
 
 		// Hash the password before saving
 		const hashedPassword = await bcryptjs.hash(password, 12);
-		const user = await User.create({ email, password: hashedPassword });
+		const user = await User.create({ email, password: hashedPassword, name });
 
 		res.cookie("jwt", generateToken(email, user._id), {
-			maxAge,
-			secure: true,
+			maxAge: 3600000,
 			sameSite: "none", // Set sameSite option to "none"
-			httpOnly: true,
 		});
 
 		return res.status(201).json({
@@ -63,10 +61,8 @@ const Login = async (req, res) => {
 		}
 
 		res.cookie("jwt", generateToken(email, user._id), {
-			maxAge,
-			secure: true,
+			maxAge: 3600000,
 			sameSite: "none", // Set sameSite option to "none"
-			httpOnly: true,
 		});
 		return res.status(200).json({
 			message: "Login successful",
